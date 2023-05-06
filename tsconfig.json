@@ -1,4 +1,3 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -24,7 +23,9 @@
       "dom"
     ],
     "paths": {
-      "@demo/checkin/data": ["src/app/domains/checkin/data/index.ts"]
+      "@demo/checkin/data": [
+        "src/app/domains/checkin/data/index.ts"
+      ]
     }
   },
   "angularCompilerOptions": {
