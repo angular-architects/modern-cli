@@ -1,6 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LuggageCardComponent } from '../../ui-common';
 import { Luggage, LuggageService } from '../../data';
 
 // import { Flight } from '../../../ticketing/data';
@@ -10,7 +9,6 @@ import { Luggage, LuggageService } from '../../data';
   standalone: true,
   imports: [
     CommonModule, 
-    LuggageCardComponent
   ],
   templateUrl: './checkin.component.html',
   styleUrls: ['./checkin.component.css']
