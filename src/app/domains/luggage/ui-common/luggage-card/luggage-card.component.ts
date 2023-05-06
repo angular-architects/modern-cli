@@ -1,10 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { initialLuggage } from '../../data/luggage';
-
-// Hier müsste ein Sheriff-Fehler kommen
-import { CheckinService } from '../../../checkin/data';
-
+import { initialLuggage } from '../../data';
 
 @Component({
   selector: 'app-luggage-card',

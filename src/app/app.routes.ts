@@ -32,6 +32,10 @@ export const APP_ROUTES: Routes = [
             .then(m => m.FeatureManageComponent)
     },
     {
+        path: 'luggage',
+        loadComponent: () => import('./domains/luggage/feature-checkin/checkin/checkin.component')
+    },
+    {
         path: 'about',
         loadComponent: () => 
             import('./shell/about/about.component')

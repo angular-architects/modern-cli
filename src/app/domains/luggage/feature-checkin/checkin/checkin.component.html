@@ -1,1 +1,7 @@
-<p>checkin works!</p>
+<h2>Checkin Luggage</h2>
+
+<div class="row">
+    <div *ngFor="let item of luggage" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+        <app-luggage-card [luggage]="item"></app-luggage-card>
+    </div>
+</div>
