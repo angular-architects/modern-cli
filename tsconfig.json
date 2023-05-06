@@ -25,6 +25,9 @@
     "paths": {
       "@demo/checkin/data": [
         "src/app/domains/checkin/data/index.ts"
+      ],
+      "@demo/util-auth": [
+        "projects/util-auth/src/public-api.ts"
       ]
     }
   },
