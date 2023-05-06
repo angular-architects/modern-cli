@@ -1,16 +1,15 @@
-import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
-import {Component, inject} from "@angular/core";
-import {FormsModule} from "@angular/forms";
-import {Store} from "@ngrx/store";
-import {take} from "rxjs";
-import {ActivatedRoute} from "@angular/router";
-import {BookingSlice, delayFlight, loadFlights, selectFlights} from "../../data";
-import {CityValidator} from "src/app/shared/util-common";
-import {FlightCardComponent} from "../../ui-common";
+import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  Flight,
+  FlightService,
+} from '../../data';
+import { CityValidator, addMinutes } from 'src/app/shared/util-common';
+import { FlightCardComponent } from '../../ui-common';
 
 // import { HiddenService } from "../../../checkin/data/hidden.service";
 // import { CheckinService } from "@demo/checkin/data";
-
 
 @Component({
   standalone: true,
@@ -26,52 +25,35 @@ import {FlightCardComponent} from "../../ui-common";
     CityValidator,
   ],
   selector: 'app-flight-search',
-  templateUrl: './flight-search.component.html'
+  templateUrl: './flight-search.component.html',
 })
-export class FlightSearchComponent  {
-
-  private store = inject<Store<BookingSlice>>(Store);
-  private route = inject(ActivatedRoute);
+export class FlightSearchComponent {
+  private flightService = inject(FlightService);
 
   from = 'Hamburg'; // in Germany
   to = 'Graz'; // in Austria
   urgent = false;
-
-  flights$ = this.store.select(selectFlights);
+  flights: Flight[] = [];
 
   basket: { [id: number]: boolean } = {
     3: true,
-    5: true
+    5: true,
   };
-
-  constructor() {
-    this.route.paramMap.subscribe(p => {
-      const from = p.get('from');
-      const to = p.get('to');
-
-      if (from && to) {
-        this.from = from;
-        this.to = to;
-        this.search();
-      }
-    });
-  }
 
   search(): void {
     if (!this.from || !this.to) return;
 
-    this.store.dispatch(loadFlights({
-      from: this.from,
-      to: this.to
-    }));
+    this.flightService
+      .find(this.from, this.to, this.urgent)
+      .subscribe((flights) => {
+
+        this.flights = flights;
+
+      });
   }
 
   delay(): void {
-    this.flights$.pipe(take(1)).subscribe(flights => {
-      const id = flights[0].id;
-      this.store.dispatch(delayFlight({id}));
-    });
+    const flight = this.flights[0];
+    flight.date = addMinutes(flight.date, 15);
   }
-
 }
-
