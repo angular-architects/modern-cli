@@ -1,12 +1,10 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  Flight,
-  FlightService,
-} from '../../data';
+import { Flight, flightBookingActions, FlightService } from '../../data';
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
+import { Store } from '@ngrx/store';
 
 // import { HiddenService } from "../../../checkin/data/hidden.service";
 // import { CheckinService } from "@demo/checkin/data";
@@ -33,7 +31,8 @@ export class FlightSearchComponent {
   from = 'Hamburg'; // in Germany
   to = 'Graz'; // in Austria
   urgent = false;
-  flights: Flight[] = [];
+  store = inject(Store);
+  flights = this.store.selectSignal((s) => s.flightBooking.flights);
 
   basket: { [id: number]: boolean } = {
     3: true,
@@ -42,18 +41,14 @@ export class FlightSearchComponent {
 
   search(): void {
     if (!this.from || !this.to) return;
-
-    this.flightService
-      .find(this.from, this.to, this.urgent)
-      .subscribe((flights) => {
-
-        this.flights = flights;
-
-      });
+    this.store.dispatch(
+      flightBookingActions.loadFlights({
+        from: this.from,
+        to: this.to,
+        urgent: this.urgent,
+      })
+    );
   }
 
-  delay(): void {
-    const flight = this.flights[0];
-    flight.date = addMinutes(flight.date, 15);
-  }
+  delay(): void {}
 }
