@@ -8,8 +8,8 @@ import {
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
 
-// import { HiddenService } from "../../../checkin/data/hidden.service";
-// import { CheckinService } from "@demo/checkin/data";
+import { HiddenService } from "../../../checkin/data/hidden.service";
+import { CheckinService } from "@demo/checkin/data";
 
 @Component({
   standalone: true,
