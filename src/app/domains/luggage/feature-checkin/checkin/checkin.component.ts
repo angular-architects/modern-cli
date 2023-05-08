@@ -23,6 +23,3 @@ export class CheckinComponent implements OnInit {
     });
   }
 }
-
-// Makes Lazy Loading easier:
-export default CheckinComponent;
