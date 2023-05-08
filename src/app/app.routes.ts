@@ -34,7 +34,8 @@ export const APP_ROUTES: Routes = [
     },
     {
         path: 'luggage',
-        loadComponent: () => import('./domains/luggage/feature-checkin/checkin/checkin.component')
+        loadComponent: () => import('./domains/luggage/feature-checkin')
+            .then(m => m.CheckinComponent)
     },
     {
         path: 'miles',
