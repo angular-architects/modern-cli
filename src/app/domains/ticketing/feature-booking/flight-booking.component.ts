@@ -2,6 +2,9 @@ import { Component, inject } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { LoggerService } from "../../../shared/util-logger";
 
+// import { CheckinService } from '@demo/checkin/data';
+// import { HiddenService } from '../data/hidden.service';
+
 @Component({
   standalone: true,
   selector: 'app-flight-booking',
