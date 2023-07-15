@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
+    "start": "nx serve",
+    "build": "nx build",
+    "watch": "nx build --watch --configuration development",
+    "test": "nx test",
+    "lint": "nx lint"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +32,8 @@
   "devDependencies": {
     "@angular-architects/module-federation": "^16.0.3",
     "@angular-devkit/build-angular": "^16.0.0",
+    "@angular-devkit/core": "~16.0.0",
+    "@angular-devkit/schematics": "~16.0.0",
     "@angular-eslint/builder": "16.0.1",
     "@angular-eslint/eslint-plugin": "16.0.1",
     "@angular-eslint/eslint-plugin-template": "16.0.1",
@@ -39,6 +41,9 @@
     "@angular-eslint/template-parser": "16.0.1",
     "@angular/cli": "~16.0.0",
     "@angular/compiler-cli": "^16.0.0",
+    "@nx/angular": "16.5.2",
+    "@nx/workspace": "16.5.2",
+    "@schematics/angular": "~16.0.0",
     "@softarc/eslint-plugin-sheriff": "^0.0.9",
     "@softarc/sheriff-core": "^0.0.9",
     "@types/jasmine": "~4.3.1",
@@ -51,6 +56,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
+    "nx": "16.5.2",
     "typescript": "~5.0.4"
   }
 }
