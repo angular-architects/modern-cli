@@ -277,6 +277,39 @@
           }
         }
       }
+    },
+    "util-ngrx-signal-store": {
+      "projectType": "library",
+      "root": "projects/util-ngrx-signal-store",
+      "sourceRoot": "projects/util-ngrx-signal-store/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/util-ngrx-signal-store/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/util-ngrx-signal-store/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/util-ngrx-signal-store/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/util-ngrx-signal-store/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -28,6 +28,9 @@
       ],
       "@demo/util-auth": [
         "projects/util-auth/src/public-api.ts"
+      ],
+      "@ngrx/signal-store": [
+        "projects/util-ngrx-signal-store/src/public-api.ts"
       ]
     }
   },
