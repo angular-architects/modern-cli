@@ -23,7 +23,7 @@ export const APP_ROUTES: Routes = [
     },
     {
         path: 'next-flight',
-        loadComponent: () => 
+        loadComponent: () =>
             import('./domains/ticketing/feature-next-flight')
                 .then(m => m.NextFlightComponent)
     },
@@ -43,7 +43,7 @@ export const APP_ROUTES: Routes = [
     },
     {
         path: 'about',
-        loadComponent: () => 
+        loadComponent: () =>
             import('./shell/about/about.component')
                 // .then(m => m.AboutComponent)
     },
