@@ -12,7 +12,10 @@ import { FlightFilterStore } from './flight-filter.store';
     ReactiveFormsModule
   ],
   templateUrl: './flight-filter.component.html',
-  styleUrls: ['./flight-filter.component.css']
+  styleUrls: ['./flight-filter.component.css'],
+  providers: [
+    FlightFilterStore
+  ]
 })
 export class FlightFilterComponent {
   @Input() set filter(filter: FlightFilter) {
@@ -27,7 +30,22 @@ export class FlightFilterComponent {
     urgent: [false]
   });
 
-  search(): void {
-    this.searchTrigger.next(this.inputFilterForm.getRawValue());
+  selectedFilterControl = new FormControl(this.inputFilterForm.getRawValue(), { nonNullable: true });
+
+  protected localStore = inject(FlightFilterStore);
+
+  constructor() {
+    this.localStore.initInputFilterUpdate(this.inputFilterForm.valueChanges);
+    this.localStore.initSelectedFilterUpdate(this.selectedFilterControl.valueChanges);
+    effect(() => this.inputFilterForm.patchValue(this.localStore.selectedFilter()), {
+      allowSignalWrites: true
+    });
+    effect(() => this.selectedFilterControl.setValue(this.localStore.latestFilter()), {
+      allowSignalWrites: true
+    });
+    effect(() => {
+      const latestFilter = this.localStore.latestFilter();
+      latestFilter && this.searchTrigger.emit(latestFilter);
+    });
   }
 }
