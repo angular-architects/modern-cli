@@ -3,10 +3,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   Flight,
+  FlightFilter,
   FlightService,
 } from '../../data';
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
+import { FlightFilterComponent } from '../../ui-common';
 
 // import { HiddenService } from "../../../checkin/data/hidden.service";
 // import { CheckinService } from "@demo/checkin/data";
@@ -22,6 +24,7 @@ import { FlightCardComponent } from '../../ui-common';
 
     FormsModule,
     FlightCardComponent,
+    FlightFilterComponent,
     CityValidator,
   ],
   selector: 'app-flight-search',
@@ -30,21 +33,25 @@ import { FlightCardComponent } from '../../ui-common';
 export class FlightSearchComponent {
   private flightService = inject(FlightService);
 
-  from = 'Hamburg'; // in Germany
-  to = 'Graz'; // in Austria
-  urgent = false;
+  filter = {
+    from: 'Hamburg',
+    to: 'Graz',
+    urgent: false
+  };
   flights: Flight[] = [];
 
-  basket: { [id: number]: boolean } = {
+  basket: Record<number, boolean> = {
     3: true,
     5: true,
   };
 
-  search(): void {
-    if (!this.from || !this.to) return;
+  search(filter: FlightFilter): void {
+    this.filter = filter;
+
+    if (!this.filter.from || !this.filter.to) return;
 
     this.flightService
-      .find(this.from, this.to, this.urgent)
+      .find(this.filter.from, this.filter.to, this.filter.urgent)
       .subscribe((flights) => {
 
         this.flights = flights;
