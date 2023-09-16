@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-bla',
     template: `<h1>Hallo</h1>`
 })
 
-export class HiddenComponent  {
+export class HiddenComponent {
 }
