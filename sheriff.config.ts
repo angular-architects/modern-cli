@@ -14,9 +14,12 @@ export const sheriffConfig: SheriffConfig = {
         'feature-<feature>': ['domain:<domain>', 'type:feature'],
         'ui-<ui>': ['domain:<domain>', 'type:ui'],
         'data': ['domain:<domain>', 'type:data'],
-        'util-<ui>': ['domain:<domain>', 'type:util'],
-      },
+        'util-<util>': ['domain:<domain>', 'type:util'],
+      }
     },
+    'projects': {
+      'util-ngrx-signal-store/src': ['shared', 'type:util']
+    }
   },
   depRules: {
     'root': ['*'],
