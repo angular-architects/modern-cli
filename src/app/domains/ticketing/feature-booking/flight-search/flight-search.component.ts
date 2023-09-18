@@ -1,5 +1,6 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, Injector, computed, effect, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import {
   Flight,
@@ -7,6 +8,7 @@ import {
 } from '../../data';
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
+import { debounceTime } from 'rxjs';
 
 // import { HiddenService } from "../../../checkin/data/hidden.service";
 // import { CheckinService } from "@demo/checkin/data";
@@ -30,30 +32,71 @@ import { FlightCardComponent } from '../../ui-common';
 export class FlightSearchComponent {
   private flightService = inject(FlightService);
 
-  from = 'Hamburg'; // in Germany
-  to = 'Graz'; // in Austria
-  urgent = false;
-  flights: Flight[] = [];
+  from = signal('Hamburg'); // in Germany
+  to = signal('Graz'); // in Austria
+  urgent = signal(false);
+  flights = signal<Flight[]>([]);
 
-  basket: { [id: number]: boolean } = {
+  basket = signal<Record<number, boolean>>({
     3: true,
     5: true,
-  };
+  });
+
+  lazyFrom$ = toObservable(this.from).pipe(
+    debounceTime(300)
+  );
+
+  lazyFrom = toSignal(this.lazyFrom$, {
+    initialValue: this.from()
+  });
+
+  flightRoute = computed(
+    () => 'From ' + this.lazyFrom() + ' to ' + this.to() + '.'
+  );
+
+  injector = inject(Injector);
+
+  constructor() {
+    effect(
+      () => console.log(this.flightRoute())
+    );
+
+    this.from.set('Paris');
+    this.from.set('London');
+    this.from.set('LA');
+    this.from.set('Tokyo');
+    this.from.set('Rio');
+  }
 
   search(): void {
-    if (!this.from || !this.to) return;
+    /* effect(
+      () => console.log(this.flightRoute()), {
+      injector: this.injector
+    }); */
+
+    if (!this.from() || !this.to()) return;
 
     this.flightService
-      .find(this.from, this.to, this.urgent)
+      .find(this.from(), this.to(), this.urgent())
       .subscribe((flights) => {
 
-        this.flights = flights;
+        this.flights.set(flights);
 
       });
   }
 
+  updateBasket(id: number, selected: boolean): void {
+    this.basket.mutate(
+      basket => basket[id] = selected
+    );
+  }
+
   delay(): void {
-    const flight = this.flights[0];
-    flight.date = addMinutes(flight.date, 15);
+    this.flights.mutate(
+      flights => {
+        const flight = flights[0];
+        flight.date = addMinutes(flight.date, 15);
+      }
+    );
   }
 }
