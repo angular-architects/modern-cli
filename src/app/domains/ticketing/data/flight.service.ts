@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { Flight } from './flight';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FlightService {
   flights: Flight[] = [];
@@ -23,11 +23,11 @@ export class FlightService {
     });
   }
 
-  find(
-    from: string,
-    to: string,
-    urgent = false
-  ): Observable<Flight[]> {
+  findPromise(from: string, to: string, urgent = false): Promise<Flight[]> {
+    return firstValueFrom(this.find(from, to, urgent));
+  }
+
+  find(from: string, to: string, urgent = false): Observable<Flight[]> {
     // For offline access
     // let url = '/assets/data/data.json';
 
