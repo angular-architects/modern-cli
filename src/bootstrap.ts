@@ -17,12 +17,10 @@ import { loggerConfig } from './app/logger.config';
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(
-      // withInterceptors([authInterceptor]),
     ),
 
     provideRouter(
       APP_ROUTES,
-      // withPreloading(PreloadAllModules)
     ),
 
     provideLogger(loggerConfig),
