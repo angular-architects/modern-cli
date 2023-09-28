@@ -1,10 +1,9 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Criteria, FlightFacade } from '../../data';
+import { Criteria, TicketingStore } from '../../data';
 import { CityValidator } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
-import { patchState } from '@ngrx/signals';
 
 @Component({
   standalone: true,
@@ -21,33 +20,27 @@ import { patchState } from '@ngrx/signals';
   templateUrl: './flight-search.component.html',
 })
 export class FlightSearchComponent {
-  private facade = inject(FlightFacade);
+  private store = inject(TicketingStore);
 
-  flights = this.facade.flights;
-  from = this.facade.from;
-  to = this.facade.to;
-  basket = this.facade.basket;
-  flightRoute = this.facade.flightRoute;
-
-  constructor() {
-    // effect(() => {
-    //   this.search();
-    // });
-  }
+  flights = this.store.flights;
+  from = this.store.from;
+  to = this.store.to;
+  basket = this.store.basket;
+  flightRoute = this.store.flightRoute;
 
   search(): void {
-    this.facade.load();
+    this.store.load();
   }
 
   delay(): void {
-    this.facade.delay();
+    this.store.delay();
   }
 
   updateBasket(flightId: number, selected: boolean): void {
-    this.facade.updateBasket(flightId, selected);
+    this.store.updateBasket(flightId, selected);
   }
 
   updateCriteria(field: keyof Criteria, value: unknown) {
-    this.facade.updateCriteria({ [field]: value });
+    this.store.updateCriteria({ [field]: value });
   }
 }

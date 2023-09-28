@@ -39,43 +39,24 @@ export const TicketingStore = signalStore(
         patchState(state, { flights });
       },
       updateBasket(flightId: number, selected: boolean): void {
-        patchState(state, (state) => ({
-          ...state,
+        patchState(state, ({ basket }) => ({
           basket: {
-            ...state.basket,
+            ...basket,
             [flightId]: selected,
           },
         }));
       },
       delay(): void {
-        patchState(state, (state) => ({
-          ...state,
+        patchState(state, ({ flights }) => ({
           flights: [
             {
-              ...state.flights[0],
-              date: addMinutes(state.flights[0].date, 15),
+              ...flights[0],
+              date: addMinutes(flights[0].date, 15),
             },
-            ...state.flights.slice(1),
+            ...flights.slice(1),
           ],
         }));
       },
     };
   })
 );
-
-// @Injectable({ providedIn: 'root' })
-// export class FlightFacade {
-//   private flightService = inject(FlightService);
-
-//   private state = signalState(initState);
-
-//   readonly from = this.state.from;
-//   readonly to = this.state.to;
-//   readonly flights = this.state.flights;
-//   readonly basket = this.state.basket;
-
-//   readonly flightRoute = selectSignal(
-//     this.from,
-//     this.to,
-//     (from, to) => from + ' to ' + to
-//   );
