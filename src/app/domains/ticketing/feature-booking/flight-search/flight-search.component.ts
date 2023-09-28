@@ -1,20 +1,13 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  Flight,
-  FlightService,
-} from '../../data';
+import { Flight, FlightService } from '../../data';
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
-
-import { HiddenService } from "../../../checkin/data/hidden.service";
-import { CheckinService } from "@demo/checkin/data";
 
 @Component({
   standalone: true,
   imports: [
-    // CommonModule,
     NgIf,
     NgForOf,
     AsyncPipe,
@@ -30,30 +23,37 @@ import { CheckinService } from "@demo/checkin/data";
 export class FlightSearchComponent {
   private flightService = inject(FlightService);
 
-  from = 'Hamburg'; // in Germany
-  to = 'Graz'; // in Austria
-  urgent = false;
-  flights: Flight[] = [];
+  from = signal('Hamburg');
+  to = signal('Graz');
+  urgent = signal(false);
+  flights = signal<Flight[]>([]);
 
-  basket: { [id: number]: boolean } = {
+  basket = signal<Record<number, boolean>>({
     3: true,
     5: true,
-  };
+  });
 
   search(): void {
-    if (!this.from || !this.to) return;
+    if (!this.from() || !this.to()) return;
 
     this.flightService
-      .find(this.from, this.to, this.urgent)
+      .find(this.from(), this.to(), this.urgent())
       .subscribe((flights) => {
-
-        this.flights = flights;
-
+        this.flights.set(flights);
       });
   }
 
   delay(): void {
-    const flight = this.flights[0];
-    flight.date = addMinutes(flight.date, 15);
+    this.flights.update((flights) => [
+      { ...flights[0], date: addMinutes(flights[0].date, 15) },
+      ...flights.slice(1),
+    ]);
+  }
+
+  updateBasket(flightId: number, selected: boolean): void {
+    this.basket.update((basket) => ({
+      ...basket,
+      [flightId]: selected,
+    }));
   }
 }
