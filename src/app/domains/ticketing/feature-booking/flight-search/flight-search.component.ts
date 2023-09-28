@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Flight, FlightService } from '../../data';
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+import { combineLatest, debounceTime, filter } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -12,7 +14,6 @@ import { FlightCardComponent } from '../../ui-common';
     NgForOf,
     AsyncPipe,
     JsonPipe,
-
     FormsModule,
     FlightCardComponent,
     CityValidator,
@@ -33,6 +34,21 @@ export class FlightSearchComponent {
     5: true,
   });
 
+  from$ = toObservable(this.from);
+  to$ = toObservable(this.to);
+
+  criteria$ = combineLatest({ from: this.from$, to: this.to$ }).pipe(
+    filter((combi) => combi.from.length >= 3 && combi.to.length >= 3),
+    debounceTime(300)
+  );
+
+  criteria = toSignal(this.criteria$, {
+    initialValue: {
+      from: '',
+      to: '',
+    },
+  });
+
   flightRoute = computed(() => this.from() + ' to ' + this.to());
 
   constructor() {
@@ -42,10 +58,12 @@ export class FlightSearchComponent {
   }
 
   search(): void {
-    if (!this.from() || !this.to()) return;
+    const { from, to } = this.criteria();
+
+    if (!from || !to) return;
 
     this.flightService
-      .find(this.from(), this.to(), this.urgent())
+      .find(from, to)
       .subscribe((flights) => {
         this.flights.set(flights);
       });
