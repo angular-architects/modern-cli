@@ -27,6 +27,7 @@ export function signalState<State extends Record<string, unknown>>(
   const deepSignal = toDeepSignal(stateSignal.asReadonly());
   Object.defineProperty(deepSignal, STATE_SIGNAL, {
     value: stateSignal,
+    configurable: true,
   });
 
   return deepSignal as SignalState<State>;

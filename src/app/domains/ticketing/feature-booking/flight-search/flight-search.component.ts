@@ -1,10 +1,9 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Criteria, FlightFacade } from '../../data';
 import { CityValidator } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
-import { patchState } from '@ngrx/signals';
 
 @Component({
   standalone: true,
@@ -28,12 +27,6 @@ export class FlightSearchComponent {
   to = this.facade.to;
   basket = this.facade.basket;
   flightRoute = this.facade.flightRoute;
-
-  constructor() {
-    // effect(() => {
-    //   this.search();
-    // });
-  }
 
   search(): void {
     this.facade.load();

@@ -4,20 +4,18 @@ import { Flight } from './flight';
 import { FlightService } from './flight.service';
 import { addMinutes } from 'src/app/shared/util-common';
 
-export type Criteria = {from?: string, to?: string};
-
-const initState = {
-  from: '',
-  to: '',
-  flights: [] as Flight[],
-  basket: {} as Record<number, boolean>,
-};
+export type Criteria = { from?: string; to?: string };
 
 @Injectable({ providedIn: 'root' })
 export class FlightFacade {
   private flightService = inject(FlightService);
 
-  private state = signalState(initState);
+  private state = signalState({
+    from: 'Graz',
+    to: 'Hamburg',
+    flights: [] as Flight[],
+    basket: {} as Record<number, boolean>,
+  });
 
   readonly from = this.state.from;
   readonly to = this.state.to;
@@ -31,11 +29,7 @@ export class FlightFacade {
   );
 
   updateCriteria(criteria: Criteria): void {
-    console.log('criteria', criteria);
     patchState(this.state, criteria);
-    console.log('from', this.from);
-    console.log('to', this.to);
-
   }
 
   async load(): Promise<void> {
@@ -47,21 +41,19 @@ export class FlightFacade {
   }
 
   updateBasket(flightId: number, selected: boolean): void {
-    patchState(this.state, (state) => ({
-      ...state,
+    patchState(this.state, ({ basket }) => ({
       basket: {
-        ...state.basket,
+        ...basket,
         [flightId]: selected,
       },
     }));
   }
 
   delay(): void {
-    patchState(this.state, (state) => ({
-      ...state,
+    patchState(this.state, ({ flights }) => ({
       flights: [
-        { ...state.flights[0], date: addMinutes(state.flights[0].date, 15) },
-        ...state.flights.slice(1),
+        { ...flights[0], date: addMinutes(flights[0].date, 15) },
+        ...flights.slice(1),
       ],
     }));
   }
