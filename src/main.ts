@@ -1,6 +1,9 @@
-import { initFederation } from '@angular-architects/module-federation';
+// import { initFederation } from '@angular-architects/module-federation';
 
-initFederation('/assets/mf.manifest.json')
-  .catch(err => console.error(err))
-  .then(_ => import('./bootstrap'))
-  .catch(err => console.error(err));
+// Disabled Federation:
+// initFederation('/assets/mf.manifest.json')
+//   .catch(err => console.error(err))
+//   .then(_ => import('./bootstrap'))
+//   .catch(err => console.error(err));
+
+import('./bootstrap').catch(err => console.error(err));

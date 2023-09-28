@@ -2,8 +2,11 @@ const { shareAll, withModuleFederationPlugin } = require('@angular-architects/mo
 
 module.exports = withModuleFederationPlugin({
 
-  shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
-  },
+  // Disable sharing for this demo:
+  shared: { }
+
+  // shared: {
+  //   ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  // },
 
 });

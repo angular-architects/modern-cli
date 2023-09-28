@@ -2,7 +2,7 @@ import { inject } from "@angular/core";
 import { Routes } from "@angular/router";
 import { AuthService } from "./shared/util-auth";
 import { HomeComponent } from "./shell/home/home.component";
-import { loadRemoteModule } from "@angular-architects/module-federation";
+// import { loadRemoteModule } from "@angular-architects/module-federation";
 
 export const APP_ROUTES: Routes = [
     {
@@ -37,10 +37,10 @@ export const APP_ROUTES: Routes = [
         loadComponent: () => import('./domains/luggage/feature-checkin')
             .then(m => m.CheckinComponent)
     },
-    {
-        path: 'miles',
-        loadComponent: () => loadRemoteModule('miles', './Component')
-    },
+    // {
+    //     path: 'miles',
+    //     loadComponent: () => loadRemoteModule('miles', './Component')
+    // },
     {
         path: 'about',
         loadComponent: () => 

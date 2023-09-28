@@ -8,8 +8,11 @@ module.exports = withModuleFederationPlugin({
     './Component': './projects/miles/src/app/app.component.ts',
   },
 
-  shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
-  },
+  // Disable sharing for this demo:
+  shared: { }
+
+  // shared: {
+  //   ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  // },
 
 });
