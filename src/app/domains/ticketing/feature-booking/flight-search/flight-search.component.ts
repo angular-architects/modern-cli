@@ -8,8 +8,8 @@ import {
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
 import { FlightCardComponent } from '../../ui-common';
 
-import { HiddenService } from "../../../checkin/data/hidden.service";
-import { CheckinService } from "@demo/checkin/data";
+// import { HiddenService } from "../../../checkin/data/hidden.service";
+// import { CheckinService } from "@demo/checkin/data";
 
 @Component({
   standalone: true,
@@ -32,7 +32,6 @@ export class FlightSearchComponent {
 
   from = 'Hamburg'; // in Germany
   to = 'Graz'; // in Austria
-  urgent = false;
   flights: Flight[] = [];
 
   basket: { [id: number]: boolean } = {
@@ -44,7 +43,7 @@ export class FlightSearchComponent {
     if (!this.from || !this.to) return;
 
     this.flightService
-      .find(this.from, this.to, this.urgent)
+      .find(this.from, this.to)
       .subscribe((flights) => {
 
         this.flights = flights;
