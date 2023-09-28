@@ -1,5 +1,5 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Flight, FlightService } from '../../data';
 import { CityValidator, addMinutes } from 'src/app/shared/util-common';
@@ -32,6 +32,14 @@ export class FlightSearchComponent {
     3: true,
     5: true,
   });
+
+  flightRoute = computed(() => this.from() + ' to ' + this.to());
+
+  constructor() {
+    effect(() => {
+      this.search();
+    });
+  }
 
   search(): void {
     if (!this.from() || !this.to()) return;
