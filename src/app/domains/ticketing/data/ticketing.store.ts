@@ -13,7 +13,8 @@ import {
 import { Flight } from './flight';
 import { FlightService } from './flight.service';
 import { addMinutes } from 'src/app/shared/util-common';
-import { debounceTime, filter, switchMap } from 'rxjs';
+import { debounceTime, filter, switchMap, tap } from 'rxjs';
+import { setLoaded, setLoading, withCallState } from './call-state.feature';
 
 export type Criteria = { from?: string; to?: string };
 
@@ -29,6 +30,7 @@ export const TicketingStore = signalStore(
     flightRoute: selectSignal(() => from() + ' to ' + to()),
     criteria: selectSignal(() => ({ from: from(), to: to() })),
   })),
+  withCallState(),
   withMethods((state) => {
     const flightService = inject(FlightService);
 
@@ -37,43 +39,41 @@ export const TicketingStore = signalStore(
         patchState(state, criteria);
       },
       async load(): Promise<void> {
+        patchState(state, setLoading());
         const flights = await flightService.findPromise(
           state.from(),
           state.to()
         );
-        patchState(state, { flights });
+        patchState(state, { flights }, setLoaded());
       },
-      loadBy(
-        criteria: Signal<{ from: string; to: string }>
-      ): void {
+      loadBy(criteria: Signal<{ from: string; to: string }>): void {
         toObservable(criteria)
           .pipe(
+            tap(() => patchState(state, setLoading())),
             filter((c) => c.from.length >= 3 && c.to.length >= 3),
             debounceTime(300),
             switchMap((c) => flightService.find(c.from, c.to))
           )
           .subscribe((flights) => {
-            patchState(state, { flights });
+            patchState(state, { flights }, setLoaded());
           });
       },
       updateBasket(flightId: number, selected: boolean): void {
-        patchState(state, (state) => ({
-          ...state,
+        patchState(state, ({ basket }) => ({
           basket: {
-            ...state.basket,
+            ...basket,
             [flightId]: selected,
           },
         }));
       },
       delay(): void {
-        patchState(state, (state) => ({
-          ...state,
+        patchState(state, ({ flights }) => ({
           flights: [
             {
-              ...state.flights[0],
-              date: addMinutes(state.flights[0].date, 15),
+              ...flights[0],
+              date: addMinutes(flights[0].date, 15),
             },
-            ...state.flights.slice(1),
+            ...flights.slice(1),
           ],
         }));
       },

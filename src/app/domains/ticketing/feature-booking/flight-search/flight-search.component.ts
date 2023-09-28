@@ -1,5 +1,5 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Criteria, TicketingStore } from '../../data';
 import { CityValidator } from 'src/app/shared/util-common';
@@ -28,6 +28,12 @@ export class FlightSearchComponent {
   basket = this.store.basket;
   flightRoute = this.store.flightRoute;
 
+  constructor() {
+    effect(() => {
+      console.log('callState', this.store.callState());
+    });
+  }
+  
   search(): void {
     this.store.load();
   }
